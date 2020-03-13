@@ -38,12 +38,12 @@ router.get("/api/:id", async (req, res) => {
 
 router.delete('/api/:id', async(req, res) => {
     const { id } = req.params;
-    const deletedProject =[];
+    // const deletedProject =[];
   
-    helpers.get(id).then(project =>{
-      deletedProjects.push(project);
-      res.status(200).json(project);
-    })
+    // helpers.get(id).then(project =>{
+    //   deletedProjects.push(project);
+    //   res.status(200).json(project);
+    // })
   
     helpers
       .remove(id)
@@ -60,5 +60,31 @@ router.delete('/api/:id', async(req, res) => {
         console.log(error);
       });
   });
+
+  router.put('/api/:id', async (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+    helpers
+      .update(id, changes)
+      .then(project => {
+        if (!project) {
+          res.status(404).json({
+            message: "Does not exist"
+          });
+        } else if (!project) {
+          res
+            .status(400)
+            .json({ message: "The specified ID does not exist." });
+        } else {
+          res.status(200).json(changes);
+        }
+      })
+      .catch(error => {
+        res.status(500).json({
+          error: "could not update"
+        });
+      });
+  });
+
 
 module.exports = router;
