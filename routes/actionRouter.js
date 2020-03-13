@@ -36,6 +36,25 @@ router.post("/api/:id", async (req, res) => {
       });
   });
   
+  router.delete('/api/:id', async(req, res) => {
+    const { id } = req.params;
+  
+    helpers
+      .remove(id)
+      .then(action => {
+        if (!action) {
+          res
+            .status(404)
+            .json({ message: "The action with the specified ID does not exist." });
+        } else {
+          res.status(204).json({ message: "Removed " });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  });
+
   router.put("/api/:id", async (req, res) => {
     const { id } = req.params;
     const changes = req.body;
