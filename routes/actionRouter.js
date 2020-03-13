@@ -36,4 +36,28 @@ router.post("/api/:id", async (req, res) => {
       });
   });
   
+  router.put("/api/:id", async (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+    helpers
+      .update(id, changes)
+      .then(action => {
+        if (!action) {
+          res.status(404).json({
+            message: "Please provide a decription and notes for the project you wish to update"
+          });
+        } else if (!action) {
+          res
+            .status(400)
+            .json({ message: "The project with the specified ID does not exist." });
+        } else {
+          res.status(200).json(changes);
+        }
+      })
+      .catch(error => {
+        res.status(500).json({
+          error: "could not update action"
+        });
+      });
+  });
 module.exports = router;
